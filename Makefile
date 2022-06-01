@@ -3,6 +3,7 @@
 APP         = asagi
 GO          = go
 GO_BUILD    = $(GO) build
+GO_BUILD_SO = $(GO) build -buildmode=c-shared
 GO_FORMAT   = $(GO) fmt
 GOFMT       = gofmt
 GO_LIST     = $(GO) list
@@ -17,6 +18,7 @@ GO_PACKAGES = $(shell $(GO_LIST) $(GO_PKGROOT))
 
 build:  ## Build binary
 	env GO111MODULE=on GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) $(GO_LDFLAGS) -o $(APP) main.go
+	gcc -Wall -Wextra -pedantic -nostdlib -Os -fpic -shared slib/main.c -o $(APP).so
 
 clean: ## Clean project
 	-rm -rf $(APP) cover.out cover.html
